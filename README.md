@@ -15,6 +15,7 @@ Testing data needs to be in the **data** folder in single column format. Please 
 #### More
 - [x] R peak detection.
 - [x] Q,S point label
+- [x] Deal with abnoral beats
 - [ ] Real time detection.
 - [ ] Other platform (Mobile).
 
