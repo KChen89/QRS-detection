@@ -19,7 +19,7 @@ def QRS_test(file_name):
 	if not os.path.isfile(file_path):
 		raise ValueError(file_path, 'not exists')
 	ecg=read_ecg(file_path)
-	R_peaks, S_pint, Q_point=EKG_QRS_detect(ecg, fs, True)
+	R_peaks, S_pint, Q_point=EKG_QRS_detect(ecg, fs, True, True)
 
 if __name__ == '__main__':
 	if len(sys.argv)<2:

@@ -4,7 +4,6 @@
 
 import numpy as np 
 import math
-# import scipy.signal as sgl
 from numpy import genfromtxt
 import matplotlib.pyplot as plt
 
@@ -86,7 +85,7 @@ def find_Q_point(ecg, R_peaks):
 		Q_point.append(cnt)
 	return np.asarray(Q_point)
 
-def EKG_QRS_detect(ecg, fs, plot=False):
+def EKG_QRS_detect(ecg, fs, QS, plot=False):
 	ws=int(fs/18)
 	sig_lgth=ecg.shape[0]
 	ecg=ecg-np.mean(ecg)
@@ -95,21 +94,22 @@ def EKG_QRS_detect(ecg, fs, plot=False):
 	ecg_integrate=integrate(ecg_integrate, ws)
 	peaks=find_peak(ecg_integrate, int(fs/72))
 	R_peaks=find_R_peaks(ecg, peaks, int(fs/40))
-	S_point=find_S_point(ecg, R_peaks)
-	Q_point=find_Q_point(ecg, R_peaks)
+	if QS:
+		S_point=find_S_point(ecg, R_peaks)
+		Q_point=find_Q_point(ecg, R_peaks)
+	else:
+		S_point=None
+		Q_point=None
 	if plot:
 		index=np.arange(sig_lgth)/fs
 		fig, ax=plt.subplots()
 		ax.plot(index, ecg, 'b', label='EKG')
-		# ax.plot(index,ecg_integrate, 'g')
-		# ax.plot(peaks/fs, ecg_integrate[peaks], 'ro')
-		# R_peaks=R_peaks.astype(np.int)
 		ax.plot(R_peaks/fs, ecg[R_peaks], 'ro', label='R peaks')
-		ax.plot(S_point/fs, ecg[S_point], 'go', label='S')
-		ax.plot(Q_point/fs, ecg[Q_point], 'yo', label='Q')
+		if QS:
+			ax.plot(S_point/fs, ecg[S_point], 'go', label='S')
+			ax.plot(Q_point/fs, ecg[Q_point], 'yo', label='Q')
 		ax.set_xlim([0, sig_lgth/fs])
 		ax.set_xlabel('Time [sec]')
 		ax.legend()
-		# ax.plot(R_peaks/fs, ecg(R_peaks), 'ro')
 		plt.show()
 	return R_peaks, S_point, Q_point
