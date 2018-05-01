@@ -1,6 +1,4 @@
 ## detect QRS complex from ECG time series
-## @author: Kemeng Chen
-## kemengchen@email.arizona.edu
 
 import numpy as np 
 import math
@@ -10,13 +8,22 @@ import matplotlib.pyplot as plt
 def read_ecg(file_name):
 	return genfromtxt(file_name, delimiter=',')
 
-def lgth_transform(ecg):
+def lgth_transform(ecg, ws):
 	lgth=ecg.shape[0]
 	sqr_diff=np.zeros(lgth)
-	diff=ecg[:-1]-ecg[1:]
-	sqr_diff[:-1]=np.multiply(diff, diff)
-	sqr_diff[-1]=sqr_diff[-2]
-	return sqr_diff
+	diff=np.zeros(lgth)
+	ecg=np.pad(ecg, ws, 'edge')
+	for i in range(lgth):
+		temp=ecg[i:i+ws+ws+1]
+		left=temp[ws]-temp[0]
+		right=temp[ws]-temp[-1]
+		diff[i]=min(left, right)
+		diff[diff<0]=0
+	# sqr_diff=np.multiply(diff, diff)
+	# diff=ecg[:-1]-ecg[1:]
+	# sqr_diff[:-1]=np.multiply(diff, diff)
+	# sqr_diff[-1]=sqr_diff[-2]
+	return np.multiply(diff, diff)
 
 def integrate(ecg, ws):
 	lgth=ecg.shape[0]
@@ -31,7 +38,7 @@ def find_peak(data, ws):
 	true_peaks=list()
 	for i in range(lgth-ws+1):
 		temp=data[i:i+ws]
-		if np.var(temp)<10:
+		if np.var(temp)<5:
 			continue
 		index=int((ws-1)/2)
 		peak=True
@@ -86,13 +93,21 @@ def find_Q_point(ecg, R_peaks):
 	return np.asarray(Q_point)
 
 def EKG_QRS_detect(ecg, fs, QS, plot=False):
-	ws=int(fs/18)
 	sig_lgth=ecg.shape[0]
 	ecg=ecg-np.mean(ecg)
-	ecg_lgth_transform=lgth_transform(ecg)
-	ecg_integrate=integrate(ecg_lgth_transform, ws)
+	ecg_lgth_transform=lgth_transform(ecg, int(fs/20))
+	# ecg_lgth_transform=lgth_transform(ecg_lgth_transform, int(fs/40))
+
+	ws=int(fs/8)
+	ecg_integrate=integrate(ecg_lgth_transform, ws)/ws
+	ws=int(fs/6)
 	ecg_integrate=integrate(ecg_integrate, ws)
-	peaks=find_peak(ecg_integrate, int(fs/72))
+	ws=int(fs/36)
+	ecg_integrate=integrate(ecg_integrate, ws)
+	ws=int(fs/72)
+	ecg_integrate=integrate(ecg_integrate, ws)
+
+	peaks=find_peak(ecg_integrate, int(fs/10))
 	R_peaks=find_R_peaks(ecg, peaks, int(fs/40))
 	if QS:
 		S_point=find_S_point(ecg, R_peaks)
@@ -111,5 +126,9 @@ def EKG_QRS_detect(ecg, fs, QS, plot=False):
 		ax.set_xlim([0, sig_lgth/fs])
 		ax.set_xlabel('Time [sec]')
 		ax.legend()
+		# ax[1].plot(ecg_integrate)
+		# ax[1].set_xlim([0, ecg_integrate.shape[0]])
+		# ax[2].plot(ecg_lgth_transform)
+		# ax[2].set_xlim([0, ecg_lgth_transform.shape[0]])
 		plt.show()
 	return R_peaks, S_point, Q_point
