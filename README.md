@@ -2,6 +2,7 @@
 This is a variant implementation of [1] including Q and S point label. 
 
 ![Q,R,S, label in ECG.](screenshots/sample.png)
+![R peak detection from bnormal heartbeat.](screenshots/ecg_2.png)
 
 ### run example
 ```
@@ -15,7 +16,7 @@ Testing data needs to be in the **data** folder in single column format. Please 
 #### More
 - [x] R peak detection.
 - [x] Q,S point label
-- [ ] Deal with abnormal beats
+- [x] Deal with abnormal beats
 - [ ] Real time detection.
 - [ ] Other platform (Mobile).
 
