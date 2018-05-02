@@ -17,7 +17,7 @@ def QRS_test(file_name):
 	fs=360
 	file_path=os.path.join(os.getcwd(), 'data', file_name)
 	if not os.path.isfile(file_path):
-		raise ValueError(file_path, 'not exists')
+		raise AssertionError(file_path, 'not exists')
 	ecg=read_ecg(file_path)
 	R_peaks, S_pint, Q_point=EKG_QRS_detect(ecg, fs, False, True)
 
