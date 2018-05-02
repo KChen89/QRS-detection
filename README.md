@@ -1,5 +1,5 @@
 # Q, R, and S Detection from ECG
-This is an implementation of Q, R, S detection on ECG including Q and S point label inspired by [1]. 
+This is an implementation of Q, R, S detection on ECG including Q and S point label inspired by "Pan-Tompkins" algorithms. 
 
 ![Q,R,S, label in ECG.](screenshots/sample.png)
 ![R peak detection from bnormal heartbeat.](screenshots/ecg_2.png)
