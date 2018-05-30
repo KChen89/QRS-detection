@@ -27,4 +27,4 @@ Testing data needs to be in the **data** folder in single column format.
 Please cite [1][2] if use. <br/>
 ##### Reference
 [1] K. Chen, W. Fink, J.M. Roveda, et al., "Wearable Sensor Based Stress Management Using Integrated Respiratory and ECG Waveforms", IEEE 12th International Conference on Wearable and Implantable Body Sensor Networks (BSN), 2015. <br/>
-[2] K. Chen, L.S. Powers, J.M.Roveda, "Noise-Invariant Components Analysis for Wearable Sensor based Electrocardiogram Monitoring System", SM Joural of Biomedical Engineering, 2018, (accepted). <br/>
+[2] K. Chen, L.S. Powers, J.M.Roveda, "Noise-Invariant Components Analysis for Wearable Sensor based Electrocardiogram Monitoring System". <br/>
